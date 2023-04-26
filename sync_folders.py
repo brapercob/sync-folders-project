@@ -15,7 +15,7 @@ parser.add_argument('-s', '--source', required=True, type=str, help="Path to the
 # Arguments with the path to copy folder
 parser.add_argument('-c', '--copy', required=True, type=str, help="Path to the copy folder")
 # Arguments with the time for iteration
-parser.add_argument('-t', '--time', help='time for iteration in seconds', type=int)
+parser.add_argument('-t', '--time', required=True, help='time for iteration in seconds', type=int)
 
 
 # Get the arguments from the parser for the paths and time period
@@ -29,16 +29,16 @@ time_period = arguments.time
 def get_logger():
     # Refers to function name
     logger_name = inspect.stack()[1][3]
-    logger = logging.getLogger(logger_name)
+    logger_ini = logging.getLogger(logger_name)
     fileHandler = logging.FileHandler('logfile.log')
     formatter = logging.Formatter('%(asctime)s :%(levelname)s :%(message)s')
     fileHandler.setFormatter(formatter)
     logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO,
                         datefmt='%Y-%m-%d %H:%M:%S')
 
-    logger.addHandler(fileHandler)
-    logger.setLevel(logging.INFO)
-    return logger
+    logger_ini.addHandler(fileHandler)
+    logger_ini.setLevel(logging.INFO)
+    return logger_ini
 
 
 # Function that return the sha256 hash digest of a file parameter
@@ -147,4 +147,3 @@ schedule.every(time_period).seconds.do(folder_updater)
 while True:
     schedule.run_pending()
     time.sleep(5)
-
